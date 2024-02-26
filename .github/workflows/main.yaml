@@ -18,4 +18,6 @@ jobs:
 
       - run: npm ci
 
-      - run: echo "hello world"
+      - run: npm run lint
+
+      - run: npm run ts-check
