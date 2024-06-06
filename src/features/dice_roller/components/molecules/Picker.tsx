@@ -1,30 +1,31 @@
-import {FC, useState} from 'react';
+import {FC, SetStateAction, useState} from 'react';
 import type {ViewStyle} from 'react-native';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 type Props = {
   style: ViewStyle;
+  value: string | null;
+  setValue: React.Dispatch<SetStateAction<string | null>>;
 };
 
 const buttons = ['2', '4', '6', '8', '10', '12', '20', '100'];
 
-const Picker: FC<Props> = ({style}) => {
+const Picker: FC<Props> = ({style, value, setValue}) => {
   const [active, setActive] = useState(false);
-  const [selectedFace, setSelectedFace] = useState<string | null>(null);
 
   const onToggleDrawer = () => {
     setActive(prev => !prev);
   };
 
   const onSelectDice = (face: string) => {
-    setSelectedFace(face);
+    setValue(face);
     setActive(false);
   };
 
   return (
     <View style={[style, styles.container]}>
       <Pressable style={styles.button} onPress={onToggleDrawer}>
-        <Text>{selectedFace ? `D${selectedFace}` : 'Dice'}</Text>
+        <Text>{value ? `D${value}` : 'Dice'}</Text>
       </Pressable>
       {active ? (
         <View style={styles.itemContainer}>
@@ -52,13 +53,13 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: 'darkgrey',
     position: 'absolute',
-    top: -240,
-    height: 240,
+    top: -320,
+    height: 320,
     width: '100%',
   },
   item: {
     paddingVertical: 5,
-    height: 30,
+    height: 40,
     width: '100%',
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
