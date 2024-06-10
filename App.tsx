@@ -2,13 +2,16 @@ import type {FC} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 
 import {ScaffoldPage} from './src/core/pages';
+import {RollsProvider} from './src/core/contexts/useRoller';
 
 const App: FC = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar />
-      <ScaffoldPage />
-    </SafeAreaView>
+    <RollsProvider>
+      <SafeAreaView style={styles.container}>
+        <StatusBar />
+        <ScaffoldPage />
+      </SafeAreaView>
+    </RollsProvider>
   );
 };
 

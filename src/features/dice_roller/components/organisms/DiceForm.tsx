@@ -1,17 +1,49 @@
-import {FC, useState} from 'react';
+import {FC, useContext, useState} from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Picker} from '../molecules';
+import {
+  RollContext,
+  RollDispatchContext,
+} from '../../../../core/contexts/useRoller';
 
 const DiceForm: FC = () => {
-  const [selectedFace, setSelectedFace] = useState<string | null>(null);
+  const [count, setCount] = useState<string>();
+  const [selectedFace, setSelectedFace] = useState<string>();
+  const [modifier, setModifier] = useState<string>();
+
+  const rolls = useContext(RollContext);
+  const dispatch = useContext(RollDispatchContext);
+
+  if (!dispatch) {
+    return;
+  }
+  if (!rolls) {
+    return;
+  }
 
   return (
     <View style={styles.container}>
+      {rolls.errors.map((value, index) => {
+        return (
+          <Text key={`error-${index}`} style={styles.error}>
+            {value}
+          </Text>
+        );
+      })}
       <TextInput
         style={styles.unit}
         placeholder="Number of dice"
         keyboardType="numeric"
         textAlign="center"
+        maxLength={2}
+        value={count}
+        onChangeText={text => setCount(text)}
+        onSubmitEditing={() => {
+          if (!count) {
+            return;
+          }
+          dispatch({type: 'set_count', countString: count});
+        }}
       />
       <Picker
         style={styles.unit}
@@ -23,6 +55,15 @@ const DiceForm: FC = () => {
         placeholder="Modifier"
         keyboardType="numeric"
         textAlign="center"
+        maxLength={3}
+        value={modifier}
+        onChangeText={text => setModifier(text)}
+        onSubmitEditing={() => {
+          if (!modifier) {
+            return;
+          }
+          dispatch({type: 'set_modifier', modifierString: modifier});
+        }}
       />
       <Pressable style={styles.floatingAction}>
         <Text style={styles.floatingActionText}>Roll</Text>
@@ -42,7 +83,7 @@ const styles = StyleSheet.create({
   floatingAction: {
     flex: 1,
     position: 'absolute',
-    top: -150,
+    top: -160,
     right: '5%',
     width: 100,
     height: 100,
@@ -54,6 +95,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
+  error: {position: 'absolute', top: -41, padding: 10, backgroundColor: 'red'},
 });
 
 export default DiceForm;

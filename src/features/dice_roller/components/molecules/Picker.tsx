@@ -4,8 +4,8 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 type Props = {
   style: ViewStyle;
-  value: string | null;
-  setValue: React.Dispatch<SetStateAction<string | null>>;
+  value: string | undefined;
+  setValue: React.Dispatch<SetStateAction<string | undefined>>;
 };
 
 const buttons = ['2', '4', '6', '8', '10', '12', '20', '100'];
