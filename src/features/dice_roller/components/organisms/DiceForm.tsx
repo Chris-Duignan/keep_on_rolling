@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {Picker} from '../molecules';
 import {useRolls, useRollsDispatch} from '../../../../core/contexts/useRoller';
 
@@ -56,9 +56,6 @@ const DiceForm: FC = () => {
           dispatch({type: 'set_modifier', modifierString: modifier});
         }}
       />
-      <Pressable style={styles.floatingAction}>
-        <Text style={styles.floatingActionText}>Roll</Text>
-      </Pressable>
     </View>
   );
 };
@@ -70,21 +67,6 @@ const styles = StyleSheet.create({
   },
   unit: {
     flex: 1,
-  },
-  floatingAction: {
-    flex: 1,
-    position: 'absolute',
-    top: -160,
-    right: '5%',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-  },
-  floatingActionText: {
-    color: 'white',
-    textAlign: 'center',
   },
   error: {position: 'absolute', top: -41, padding: 10, backgroundColor: 'red'},
 });

@@ -1,3 +1,4 @@
 import DiceForm from './DiceForm';
+import ResultsContainer from './ResultsContainer';
 
-export {DiceForm};
+export {DiceForm, ResultsContainer};
