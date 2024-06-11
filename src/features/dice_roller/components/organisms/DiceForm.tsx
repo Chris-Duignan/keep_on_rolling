@@ -12,13 +12,7 @@ const DiceForm: FC = () => {
 
   return (
     <View style={styles.container}>
-      {rolls.errors.map((value, index) => {
-        return (
-          <Text key={`error-${index}`} style={styles.error}>
-            {value}
-          </Text>
-        );
-      })}
+      {rolls.errors ? <Text style={styles.error}>{rolls.errors}</Text> : null}
       <TextInput
         style={styles.unit}
         placeholder="Number of dice"
