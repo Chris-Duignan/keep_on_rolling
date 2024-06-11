@@ -1,26 +1,24 @@
 import {FC} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {useRolls} from '../../../../core/contexts/useRoller';
+import {Pressable, ScrollView, StyleSheet, Text} from 'react-native';
+import {useRolls, useRollsDispatch} from '../../../../core/contexts/useRoller';
+import ResultsCard from './ResultsCard';
 
 const ResultsContainer: FC = () => {
   const rolls = useRolls();
+  const dispatch = useRollsDispatch();
 
   return (
     <>
       <ScrollView style={styles.body}>
         {rolls.results.length ? (
-          rolls.results.map(roll => {
-            return (
-              <View style={styles.card}>
-                <Text>{roll}</Text>
-              </View>
-            );
-          })
+          <ResultsCard />
         ) : (
           <Text style={styles.card}>Choose what to roll</Text>
         )}
       </ScrollView>
-      <Pressable style={styles.floatingAction}>
+      <Pressable
+        onPress={() => dispatch({type: 'roll_dice'})}
+        style={styles.floatingAction}>
         <Text style={styles.floatingActionText}>Roll</Text>
       </Pressable>
     </>
@@ -35,7 +33,7 @@ const styles = StyleSheet.create({
   },
   card: {
     padding: 20,
-    height: 200,
+    height: 150,
     backgroundColor: 'darkgrey',
     borderRadius: 10,
   },
