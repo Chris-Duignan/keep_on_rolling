@@ -1,4 +1,4 @@
-import {FC, ReactNode, createContext, useReducer} from 'react';
+import {FC, ReactNode, createContext, useContext, useReducer} from 'react';
 import type {Dispatch} from 'react';
 
 type RollsState = {
@@ -11,7 +11,8 @@ type RollsState = {
 type RollsAction =
   | {type: 'set_count'; countString: string}
   | {type: 'set_dice'; diceString: string}
-  | {type: 'set_modifier'; modifierString: string};
+  | {type: 'set_modifier'; modifierString: string}
+  | {type: 'add_error'; errorMessage: string};
 
 const rollsReducer = (state: RollsState, action: RollsAction): RollsState => {
   switch (action.type) {
@@ -58,6 +59,13 @@ const rollsReducer = (state: RollsState, action: RollsAction): RollsState => {
       newModifierState.modifier = parsedModifier;
       return newModifierState;
 
+    case 'add_error':
+      const newErrorState = {...state};
+
+      newErrorState.errors.push(action.errorMessage);
+
+      return newErrorState;
+
     default:
       return {...state};
   }
@@ -86,4 +94,24 @@ export const RollsProvider: FC<{children: ReactNode}> = ({children}) => {
       </RollDispatchContext.Provider>
     </RollContext.Provider>
   );
+};
+
+export const useRolls = () => {
+  const rolls = useContext(RollContext);
+
+  if (!rolls) {
+    throw new Error('Must be used inside provider');
+  }
+
+  return rolls;
+};
+
+export const useRollsDispatch = () => {
+  const dispatch = useContext(RollDispatchContext);
+
+  if (!dispatch) {
+    throw new Error('Must be used inside provider');
+  }
+
+  return dispatch;
 };

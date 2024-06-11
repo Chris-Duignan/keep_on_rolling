@@ -1,25 +1,14 @@
-import {FC, useContext, useState} from 'react';
+import {FC, useState} from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Picker} from '../molecules';
-import {
-  RollContext,
-  RollDispatchContext,
-} from '../../../../core/contexts/useRoller';
+import {useRolls, useRollsDispatch} from '../../../../core/contexts/useRoller';
 
 const DiceForm: FC = () => {
   const [count, setCount] = useState<string>();
-  const [selectedFace, setSelectedFace] = useState<string>();
   const [modifier, setModifier] = useState<string>();
 
-  const rolls = useContext(RollContext);
-  const dispatch = useContext(RollDispatchContext);
-
-  if (!dispatch) {
-    return;
-  }
-  if (!rolls) {
-    return;
-  }
+  const rolls = useRolls();
+  const dispatch = useRollsDispatch();
 
   return (
     <View style={styles.container}>
@@ -47,8 +36,10 @@ const DiceForm: FC = () => {
       />
       <Picker
         style={styles.unit}
-        value={selectedFace}
-        setValue={setSelectedFace}
+        value={rolls.dice ? `D${rolls.dice}` : 'Dice'}
+        setValue={(value: string) => {
+          dispatch({type: 'set_dice', diceString: value});
+        }}
       />
       <TextInput
         style={styles.unit}

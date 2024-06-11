@@ -1,11 +1,11 @@
-import {FC, SetStateAction, useState} from 'react';
+import {FC, useState} from 'react';
 import type {ViewStyle} from 'react-native';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 type Props = {
   style: ViewStyle;
-  value: string | undefined;
-  setValue: React.Dispatch<SetStateAction<string | undefined>>;
+  value: string | null;
+  setValue: (value: string) => void;
 };
 
 const buttons = ['2', '4', '6', '8', '10', '12', '20', '100'];
@@ -17,7 +17,7 @@ const Picker: FC<Props> = ({style, value, setValue}) => {
     setActive(prev => !prev);
   };
 
-  const onSelectDice = (face: string) => {
+  const onSelectValue = (face: string) => {
     setValue(face);
     setActive(false);
   };
@@ -25,7 +25,7 @@ const Picker: FC<Props> = ({style, value, setValue}) => {
   return (
     <View style={[style, styles.container]}>
       <Pressable style={styles.button} onPress={onToggleDrawer}>
-        <Text>{value ? `D${value}` : 'Dice'}</Text>
+        <Text>{value}</Text>
       </Pressable>
       {active ? (
         <View style={styles.itemContainer}>
@@ -33,7 +33,7 @@ const Picker: FC<Props> = ({style, value, setValue}) => {
             <Pressable
               style={styles.item}
               key={`b${index}`}
-              onPress={() => onSelectDice(button)}>
+              onPress={() => onSelectValue(button)}>
               <Text style={styles.text}>D{button}</Text>
             </Pressable>
           ))}
