@@ -6,6 +6,7 @@ type RollsState = {
   dice: number | null;
   modifier: number | null;
   errors: string[];
+  results: string[];
 };
 
 type RollsAction =
@@ -82,6 +83,7 @@ const createInitialState = (): RollsState => {
     dice: null,
     modifier: null,
     errors: [],
+    results: [],
   };
 };
 
