@@ -15,9 +15,7 @@ const ResultsCard: FC = () => {
     <View style={styles.card}>
       <Text style={styles.total}>{total}</Text>
       <View style={styles.detail}>
-        <View style={styles.title}>
-          <Text style={styles.titleText}>{formula}</Text>
-        </View>
+        <Text style={styles.titleText}>{formula}</Text>
         <Text style={styles.results}>{results.join(', ')}</Text>
       </View>
     </View>
@@ -47,15 +45,11 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 10,
   },
-  title: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   titleText: {
     fontSize: 18,
     fontWeight: 'bold',
   },
-  results: {flex: 1, fontSize: 16},
+  results: {fontSize: 16},
 });
 
 export default ResultsCard;
