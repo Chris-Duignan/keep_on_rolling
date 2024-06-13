@@ -24,10 +24,13 @@ const rollsReducer = (
 ): RollsState[] => {
   switch (action.type) {
     case 'add_set':
-      const newSetState = state.map(val => {
-        const newResults = [...val.results];
-        return {...val, results: newResults};
-      });
+      const newSetState =
+        state.length > 0 && state[0].results.length > 0
+          ? []
+          : state.map(val => {
+              const newResults = [...val.results];
+              return {...val, results: newResults};
+            });
 
       newSetState.push({
         count: action.count,
