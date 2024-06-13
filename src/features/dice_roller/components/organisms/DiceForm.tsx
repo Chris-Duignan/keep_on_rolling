@@ -1,39 +1,37 @@
-import {FC, useState} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {FC} from 'react';
+import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Picker} from '../molecules';
-import {useRolls, useRollsDispatch} from '../../../../core/contexts/useRoller';
+import {useRollsDispatch} from '../../../../core/contexts/useRoller';
+import {useDiceForm} from '../../hooks/useDiceForm';
 
 const DiceForm: FC = () => {
-  const [count, setCount] = useState<string>();
-  const [modifier, setModifier] = useState<string>();
-
-  const rolls = useRolls();
+  const formState = useDiceForm();
   const dispatch = useRollsDispatch();
 
   return (
     <View style={styles.container}>
-      {rolls.errors ? <Text style={styles.error}>{rolls.errors}</Text> : null}
+      {formState.error ? (
+        <Text style={styles.error}>{formState.error}</Text>
+      ) : null}
       <TextInput
         style={styles.unit}
         placeholder="Number of dice"
         keyboardType="numeric"
         textAlign="center"
         maxLength={2}
-        value={count}
-        onChangeText={text => setCount(text)}
+        value={formState.count}
+        onChangeText={formState.handleCountChange}
         onSubmitEditing={() => {
-          if (!count) {
+          if (!formState.count) {
             return;
           }
-          dispatch({type: 'set_count', countString: count});
+          formState.handleCountSubmit(formState.count);
         }}
       />
       <Picker
         style={styles.unit}
-        value={rolls.dice ? `D${rolls.dice}` : 'Dice'}
-        setValue={(value: string) => {
-          dispatch({type: 'set_dice', diceString: value});
-        }}
+        value={formState.dice ? `D${formState.dice}` : 'Dice'}
+        setValue={formState.handleDiceSubmit}
       />
       <TextInput
         style={styles.unit}
@@ -41,15 +39,25 @@ const DiceForm: FC = () => {
         keyboardType="numeric"
         textAlign="center"
         maxLength={3}
-        value={modifier}
-        onChangeText={text => setModifier(text)}
+        value={formState.modifier}
+        onChangeText={formState.handleModifierChange}
         onSubmitEditing={() => {
-          if (!modifier) {
+          if (!formState.modifier) {
             return;
           }
-          dispatch({type: 'set_modifier', modifierString: modifier});
+          formState.handleModifierSubmit(formState.modifier);
         }}
       />
+      <Pressable
+        style={[styles.floatingAction, styles.floatingActionRoll]}
+        onPress={() => dispatch({type: 'roll_dice'})}>
+        <Text style={styles.floatingActionText}>Roll</Text>
+      </Pressable>
+      <Pressable
+        style={[styles.floatingAction, styles.floatingActionAdd]}
+        onPress={formState.handleAddSet}>
+        <Text style={styles.floatingActionText}>Add</Text>
+      </Pressable>
     </View>
   );
 };
@@ -63,6 +71,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   error: {position: 'absolute', top: -41, padding: 10, backgroundColor: 'red'},
+  floatingAction: {
+    flex: 1,
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'blue',
+    justifyContent: 'center',
+    right: 20,
+  },
+  floatingActionText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  floatingActionRoll: {
+    bottom: 130,
+  },
+  floatingActionAdd: {
+    bottom: 250,
+  },
 });
 
 export default DiceForm;

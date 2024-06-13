@@ -2,111 +2,67 @@ import {FC, ReactNode, createContext, useContext, useReducer} from 'react';
 import type {Dispatch} from 'react';
 import {rollDice} from '../utils';
 
-type RollsState = {
-  count: number | null;
-  dice: number | null;
-  modifier: number | null;
-  errors: string;
+export type RollsState = {
+  count: number;
+  dice: number;
+  modifier: number;
   results: number[];
 };
 
 type RollsAction =
-  | {type: 'set_count'; countString: string}
-  | {type: 'set_dice'; diceString: string}
-  | {type: 'set_modifier'; modifierString: string}
-  | {type: 'roll_dice'}
-  | {type: 'add_error'; errorMessage: string};
+  | {
+      type: 'add_set';
+      count: number;
+      dice: number;
+      modifier: number;
+    }
+  | {type: 'roll_dice'};
 
-const rollsReducer = (state: RollsState, action: RollsAction): RollsState => {
+const rollsReducer = (
+  state: RollsState[],
+  action: RollsAction,
+): RollsState[] => {
   switch (action.type) {
-    case 'set_count':
-      const newCountState = {...state};
-      newCountState.count = null;
-      newCountState.results = [];
+    case 'add_set':
+      const newSetState = state.map(val => {
+        const newResults = [...val.results];
+        return {...val, results: newResults};
+      });
 
-      if (/\D/g.test(action.countString)) {
-        newCountState.errors = 'Enter number between 1 and 20';
-        return newCountState;
-      }
+      newSetState.push({
+        count: action.count,
+        dice: action.dice,
+        modifier: action.modifier,
+        results: [],
+      });
 
-      const parsedCount = parseInt(action.countString, 10);
-
-      if (parsedCount < 1 || parsedCount > 20) {
-        newCountState.errors = 'Number between 1 and 20';
-        return newCountState;
-      }
-
-      newCountState.count = parsedCount;
-      return newCountState;
-
-    case 'set_dice':
-      const newDiceState = {...state};
-      newDiceState.results = [];
-
-      const parsedDice = parseInt(action.diceString, 10);
-
-      newDiceState.dice = parsedDice;
-
-      return newDiceState;
-
-    case 'set_modifier':
-      const newModifierState = {...state};
-      newModifierState.modifier = null;
-      newModifierState.results = [];
-
-      if (!/^-?\d+$/g.test(action.modifierString)) {
-        newModifierState.errors = 'Enter a positive/negative number';
-      }
-
-      const parsedModifier = parseInt(action.modifierString, 10);
-
-      newModifierState.modifier = parsedModifier;
-      return newModifierState;
+      return newSetState;
 
     case 'roll_dice':
-      const newResultState = {...state};
-      newResultState.results = [];
+      const rollState = state.map(val => {
+        const newRolls: number[] = [];
 
-      if (
-        !newResultState.count ||
-        !newResultState.dice ||
-        !newResultState.modifier
-      ) {
-        newResultState.errors = 'Please complete dice selection';
-        return newResultState;
-      }
+        for (let i = 0; i < val.count; i++) {
+          newRolls.push(rollDice(val.dice));
+        }
 
-      for (let i = 0; i < newResultState.count; i++) {
-        newResultState.results.push(rollDice(newResultState.dice));
-      }
+        return {...val, results: newRolls};
+      });
 
-      return newResultState;
-
-    case 'add_error':
-      const newErrorState = {...state};
-
-      newErrorState.errors = action.errorMessage;
-
-      return newErrorState;
+      return rollState;
 
     default:
-      return {...state};
+      return [...state];
   }
 };
 
-export const RollContext = createContext<null | RollsState>(null);
+export const RollContext = createContext<null | RollsState[]>(null);
 export const RollDispatchContext = createContext<null | Dispatch<RollsAction>>(
   null,
 );
 
-const createInitialState = (): RollsState => {
-  return {
-    count: null,
-    dice: null,
-    modifier: null,
-    errors: '',
-    results: [],
-  };
+const createInitialState = (): RollsState[] => {
+  return [];
 };
 
 export const RollsProvider: FC<{children: ReactNode}> = ({children}) => {
