@@ -1,16 +1,20 @@
 import {FC} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {useRolls} from '../../../../core/contexts/useRoller';
+import {RollsState} from '../../../../core/contexts/useRoller';
 
-const ResultsCard: FC = () => {
-  const {results, count, modifier, dice} = useRolls();
+type Props = {
+  roll: RollsState;
+};
 
-  if (!count || !dice || !modifier) {
-    return null;
-  }
+const ResultsCard: FC<Props> = ({roll}) => {
+  const {count, dice, modifier, results} = roll;
 
-  const total = results.reduce((prev, current) => prev + current, 0) + modifier;
+  const total = results.length
+    ? results.reduce((prev, current) => prev + current, 0) + modifier
+    : '';
+
   const formula = `${count}D${dice}${modifier < 0 ? '' : '+'}${modifier}`;
+
   return (
     <View style={styles.card}>
       <Text style={styles.total}>{total}</Text>
@@ -30,6 +34,7 @@ const styles = StyleSheet.create({
     height: 150,
     backgroundColor: 'darkgrey',
     borderRadius: 10,
+    marginBottom: 10,
   },
   total: {
     flex: 1,
