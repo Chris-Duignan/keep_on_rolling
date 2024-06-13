@@ -9,10 +9,13 @@ const ResultsContainer: FC = () => {
   return (
     <>
       <ScrollView style={styles.body}>
-        {rolls.map((roll, index) => {
-          return <ResultsCard key={index} roll={roll} />;
-        })}
-        <Text style={styles.card}>Choose what to roll</Text>
+        {rolls.length ? (
+          rolls.map((roll, index) => {
+            return <ResultsCard key={index} roll={roll} />;
+          })
+        ) : (
+          <Text style={styles.card}>Choose what to roll</Text>
+        )}
       </ScrollView>
     </>
   );
