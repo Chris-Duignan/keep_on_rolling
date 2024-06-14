@@ -22,10 +22,14 @@ const Picker: FC<Props> = ({style, value, setValue}) => {
     setActive(false);
   };
 
+  const activeStyle = {
+    backgroundColor: active ? '#247BA0' : '#2d6c87',
+  };
+
   return (
     <View style={[style, styles.container]}>
-      <Pressable style={styles.button} onPress={onToggleDrawer}>
-        <Text>{value}</Text>
+      <Pressable style={[styles.button, activeStyle]} onPress={onToggleDrawer}>
+        <Text style={styles.buttonText}>{value}</Text>
       </Pressable>
       {active ? (
         <View style={styles.itemContainer}>
@@ -49,9 +53,17 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderColor: 'lightgrey',
   },
-  button: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  button: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white',
+  },
+  buttonText: {
+    color: 'white',
+  },
   itemContainer: {
-    backgroundColor: 'darkgrey',
+    backgroundColor: '#247BA0',
     position: 'absolute',
     top: -320,
     height: 320,
@@ -66,6 +78,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
+    color: 'white',
   },
 });
 

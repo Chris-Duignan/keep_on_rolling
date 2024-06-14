@@ -14,7 +14,7 @@ const ResultsContainer: FC = () => {
             return <ResultsCard key={index} roll={roll} />;
           })
         ) : (
-          <Text style={styles.card}>Choose what to roll</Text>
+          <Text style={styles.card}>Welcome to Keep on Rolling</Text>
         )}
       </ScrollView>
     </>
@@ -31,7 +31,9 @@ const styles = StyleSheet.create({
     padding: 20,
     height: 150,
     backgroundColor: 'darkgrey',
+    color: 'white',
     borderRadius: 10,
+    textAlign: 'center',
   },
 });
 
