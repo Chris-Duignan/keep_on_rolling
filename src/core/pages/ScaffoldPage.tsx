@@ -4,7 +4,6 @@ import {
   DiceForm,
   ResultsContainer,
 } from '../../features/dice_roller/components/organisms';
-import ChatPage from '../../features/chat/chat';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 type RootStackParamList = {
@@ -22,11 +21,6 @@ const ScaffoldPage: FC = () => {
           name="Home"
           component={ResultsContainer}
           options={{title: 'Welcome'}}
-        />
-        <Stack.Screen
-          name="Chat"
-          component={ChatPage}
-          options={{title: 'Chat'}}
         />
       </Stack.Navigator>
       <DiceForm />

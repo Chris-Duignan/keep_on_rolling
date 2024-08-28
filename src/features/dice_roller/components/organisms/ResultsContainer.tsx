@@ -16,9 +16,6 @@ const ResultsContainer: FC<Props> = ({navigation}) => {
 
   return (
     <>
-      <View>
-        <Button title="Chat" onPress={() => navigation.navigate('Chat')} />
-      </View>
       <ScrollView style={styles.body}>
         {rolls.length ? (
           rolls.map((roll, index) => {
