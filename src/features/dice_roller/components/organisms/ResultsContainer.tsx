@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Button, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text} from 'react-native';
 import {useRolls} from '../../../../core/contexts/useRoller';
 import {ResultsCard} from '../molecules';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -11,7 +11,7 @@ type RootStackParamList = {
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
-const ResultsContainer: FC<Props> = ({navigation}) => {
+const ResultsContainer: FC<Props> = () => {
   const rolls = useRolls();
 
   return (
